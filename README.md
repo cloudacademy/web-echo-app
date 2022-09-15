@@ -1,5 +1,5 @@
-![Build Status](https://github.com/cloudacademy/webechoapp/actions/workflows/go.yml/badge.svg) 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/cloudacademy/webechoapp)
+![Build Status](https://github.com/cloudacademy/web-echo-app/actions/workflows/go.yml/badge.svg) 
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/cloudacademy/web-echo-app)
 
 # Web Echo App
 A simple web based application that prints a message on a coloured background, both of which can be configured using environment variables.
