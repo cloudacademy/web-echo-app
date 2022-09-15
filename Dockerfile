@@ -10,4 +10,7 @@ FROM scratch
 
 COPY --from=builder /go/src/webapp/webapp /go/bin/
 
+ENV HOSTPORT=0.0.0.0:8080
+EXPOSE 8080
+
 CMD ["/go/bin/webapp"]

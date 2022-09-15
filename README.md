@@ -16,12 +16,12 @@ MESSAGE=CloudAcademy BACKGROUND_COLOR=yellow ./webapp
 The web application has been packaged into a Docker image. The Docker image can be pulled with the following command:
 
 ```
-docker pull cloudacademydevops/webappecho:v2
+docker pull cloudacademydevops/webappecho:v3
 ```
 
 Use the following command to launch the web echoing application within Docker:
 ```
-docker run --name webapp --env MESSAGE=CloudAcademy --env BACKGROUND_COLOR=yellow -p 8080:80 --detach cloudacademydevops/webappecho:v2
+docker run --name webapp --env MESSAGE=CloudAcademy --env BACKGROUND_COLOR=yellow -p 8080:8080 --detach cloudacademydevops/webappecho:v3
 ```
 
 ## Kubernetes
@@ -32,7 +32,7 @@ cat << EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapp
+  name: frontend-v1
   namespace: webapp
   labels:
     role: frontend
@@ -51,11 +51,11 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: cloudacademydevops/webappecho:v2
+        image: cloudacademydevops/webappecho:v3
         imagePullPolicy: IfNotPresent
-        command: ["/go/bin/demo"]
+        command: ["/go/bin/webapp"]
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         env:
         - name: MESSAGE
           valueFrom:
