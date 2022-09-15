@@ -17,7 +17,7 @@ const htmlTemplate = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CloudAcademy Kustomize Lab</title>
+    <title>CloudAcademy</title>
 </head>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 
@@ -47,6 +47,7 @@ h1 {
 `
 
 func main() {
+	hostport := os.Getenv("HOSTPORT")
 	message := os.Getenv("MESSAGE")
 	bgcolor := os.Getenv("BACKGROUND_COLOR")
 
@@ -60,5 +61,5 @@ func main() {
 		tmpl.Execute(w, data)
 	})
 
-	http.ListenAndServe(":80", nil)
+	http.ListenAndServe(hostport, nil)
 }
