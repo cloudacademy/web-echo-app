@@ -5,12 +5,16 @@
 A simple web based application that prints a message on a coloured background, both of which can be configured using environment variables.
 
 ## Usage
-To start the web application, configure both the `MESSAGE` and `BACKGROUND_COLOR` environment variables.
+To start the web application, configure the following environment variables:
+ - `HOSTPORT=0.0.0.0:8080`
+ - `MESSAGE="CloudAcademy ❤ DevOps"`
+ - `BACKGROUND_COLOR=yello`
 
 Startup:
 ```
-MESSAGE=CloudAcademy BACKGROUND_COLOR=yellow ./webapp
+HOSTPORT=0.0.0.0:8080 MESSAGE="CloudAcademy ❤ DevOps" BACKGROUND_COLOR=yellow ./webapp
 ```
+![webapp](./docs/webapp.png)
 
 ## Docker
 The web application has been packaged into a Docker image. The Docker image can be pulled with the following command:
