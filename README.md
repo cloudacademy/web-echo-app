@@ -89,5 +89,5 @@ CGO_ENABLED=0 GOOS=linux go build -o webapp .
 
 Docker:
 ```
-docker buildx build --platform=linux/amd64 -t cloudacademydevops/webappecho:v2 .
+docker buildx build --platform=linux/amd64 -t cloudacademydevops/webappecho:v3 .
 ```
