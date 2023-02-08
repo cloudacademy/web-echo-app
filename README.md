@@ -9,23 +9,32 @@ To start the web application, configure the following environment variables:
  - `HOSTPORT=0.0.0.0:8080`
  - `MESSAGE="CloudAcademy ❤ DevOps"`
  - `BACKGROUND_COLOR=yello`
+ - `AUTO_RELOAD=30` (optional - used to auto reload the current page in the browser - measured in seconds)
 
-Startup:
+## Startup:
+
+Example 1:
 ```
-HOSTPORT=0.0.0.0:8080 MESSAGE="CloudAcademy ❤ DevOps" BACKGROUND_COLOR=yellow ./webapp
+HOSTPORT=0.0.0.0:8080 MESSAGE="CloudAcademy ❤ DevOps" BACKGROUND_COLOR=cyan ./webapp
 ```
+
+Example 2:
+```
+HOSTPORT=0.0.0.0:8080 MESSAGE="CloudAcademy ❤ DevOps" BACKGROUND_COLOR=yellow AUTO_RELOAD=30 ./webapp
+```
+
 ![webapp](./docs/webapp.png)
 
 ## Docker
 The web application has been packaged into a Docker image. The Docker image can be pulled with the following command:
 
 ```
-docker pull cloudacademydevops/webappecho:v3
+docker pull cloudacademydevops/webappecho:v4
 ```
 
 Use the following command to launch the web echoing application within Docker:
 ```
-docker run --name webapp --env MESSAGE=CloudAcademy --env BACKGROUND_COLOR=yellow -p 8080:8080 --detach cloudacademydevops/webappecho:v3
+docker run --name webapp --env MESSAGE=CloudAcademy --env BACKGROUND_COLOR=yellow --env AUTO_RELOAD=30 -p 8080:8080 --detach cloudacademydevops/webappecho:v4
 ```
 
 ## Kubernetes
@@ -36,41 +45,37 @@ cat << EOF | kubectl apply -f -
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-v1
-  namespace: webapp
+  name: webecho
+  namespace: cloudacademy
   labels:
-    role: frontend
+    app: webecho
     version: v1
 spec:
   replicas: 2
   selector:
     matchLabels:
-      role: frontend
+      app: webecho
       version: v1
   template:
     metadata:
       labels:
-        role: frontend
+        app: webecho
         version: v1
     spec:
       containers:
-      - name: webapp
-        image: cloudacademydevops/webappecho:v3
+      - name: webecho
+        image: cloudacademydevops/webappecho:v4
         imagePullPolicy: IfNotPresent
         command: ["/go/bin/webapp"]
         ports:
         - containerPort: 8080
         env:
         - name: MESSAGE
-          valueFrom:
-            configMapKeyRef:
-              name: webapp-cfg-v1
-              key: message
+          value: "CloudAcademy ❤ DevOps"
         - name: BACKGROUND_COLOR
-          valueFrom:
-            configMapKeyRef:
-              name: webapp-cfg-v1
-              key: bgcolor
+          value: yellow
+        - name: AUTO_RELOAD
+          value: 30
 EOF
 ```
 
@@ -82,12 +87,17 @@ Current operating system:
 go build .
 ```
 
-Linux operating system:
+**Linux** operating system:
 ```
-CGO_ENABLED=0 GOOS=linux go build -o webapp .
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o webapp
+```
+
+**macOS** operating system:
+```
+CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o webapp
 ```
 
 Docker:
 ```
-docker buildx build --platform=linux/amd64 -t cloudacademydevops/webappecho:v3 .
+docker buildx build --platform=linux/amd64 -t cloudacademydevops/webappecho:v4 .
 ```

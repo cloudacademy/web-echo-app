@@ -4,11 +4,14 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"strconv"
+	"fmt"
 )
 
 type config struct {
 	Message         string
 	BackgroundColor string
+	PageReloadTime 	int
 }
 
 const htmlTemplate = `
@@ -40,6 +43,20 @@ h1 {
 }
 </style>
 
+{{ if gt .PageReloadTime 0 }}
+<script language="javascript">
+setInterval(function(){
+	fetch(window.location.href)
+    .then(response => {
+		window.location.reload(1);
+    })
+    .catch(err => {
+    	console.log(err);
+    });
+}, {{.PageReloadTime}});
+</script>
+{{end}}
+
 <body>
 <h1>{{.Message}}</h1>
 </body>
@@ -50,6 +67,12 @@ func main() {
 	hostport := os.Getenv("HOSTPORT")
 	message := os.Getenv("MESSAGE")
 	bgcolor := os.Getenv("BACKGROUND_COLOR")
+	pagereloadtime := 0
+
+	if os.Getenv("AUTO_RELOAD") != "" {
+		pagereloadtime, _ = strconv.Atoi(os.Getenv("AUTO_RELOAD"))
+		pagereloadtime = pagereloadtime * 1000
+	}
 
 	tmpl := template.Must(template.New("main").Parse(htmlTemplate))
 
@@ -57,9 +80,11 @@ func main() {
 		data := config{
 			Message:         message,
 			BackgroundColor: bgcolor,
+			PageReloadTime:  pagereloadtime,
 		}
 		tmpl.Execute(w, data)
 	})
 
+	fmt.Println("web server launched successfully...")
 	http.ListenAndServe(hostport, nil)
 }
