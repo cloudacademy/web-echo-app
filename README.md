@@ -5,20 +5,48 @@
 A simple web based application that prints a message on a coloured background, both of which can be configured using environment variables.
 
 ## Usage
-To start the web application, configure the following environment variables:
+To start the web application, configure the following optional environment variables:
  - `HOSTPORT=0.0.0.0:8080`
  - `MESSAGE="CloudAcademy ❤ DevOps"`
  - `BACKGROUND_COLOR=yello`
- - `AUTO_RELOAD=30` (optional - used to auto reload the current page in the browser - measured in seconds)
+ - `AUTO_RELOAD=30`
+
+## Build
+The following commands can be used to build and package the source code:
+
+Current operating system:
+```
+go build .
+```
+
+**Linux** operating system:
+```
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o webapp
+```
+
+**macOS** operating system:
+```
+CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o webapp
+```
+
+Docker:
+```
+docker buildx build --platform=linux/amd64 -t cloudacademydevops/webappecho .
+```
 
 ## Startup:
 
 Example 1:
 ```
-HOSTPORT=0.0.0.0:8080 MESSAGE="CloudAcademy ❤ DevOps" BACKGROUND_COLOR=cyan ./webapp
+./webapp
 ```
 
 Example 2:
+```
+HOSTPORT=0.0.0.0:8080 MESSAGE="CloudAcademy ❤ DevOps" BACKGROUND_COLOR=cyan ./webapp
+```
+
+Example 3:
 ```
 HOSTPORT=0.0.0.0:8080 MESSAGE="CloudAcademy ❤ DevOps" BACKGROUND_COLOR=yellow AUTO_RELOAD=30 ./webapp
 ```
@@ -29,12 +57,16 @@ HOSTPORT=0.0.0.0:8080 MESSAGE="CloudAcademy ❤ DevOps" BACKGROUND_COLOR=yellow 
 The web application has been packaged into a Docker image. The Docker image can be pulled with the following command:
 
 ```
-docker pull cloudacademydevops/webappecho:v4
+docker pull cloudacademydevops/webappecho
 ```
 
 Use the following command to launch the web echoing application within Docker:
 ```
-docker run --name webapp --env MESSAGE=CloudAcademy --env BACKGROUND_COLOR=yellow --env AUTO_RELOAD=30 -p 8080:8080 --detach cloudacademydevops/webappecho:v4
+docker run --name webapp \
+--env MESSAGE=CloudAcademy \
+--env BACKGROUND_COLOR=yellow \
+--env AUTO_RELOAD=30 \
+-p 8080:8080 cloudacademydevops/webappecho
 ```
 
 ## Kubernetes
@@ -64,7 +96,7 @@ spec:
     spec:
       containers:
       - name: webecho
-        image: cloudacademydevops/webappecho:v4
+        image: cloudacademydevops/webappecho
         imagePullPolicy: IfNotPresent
         command: ["/go/bin/webapp"]
         ports:
@@ -77,27 +109,4 @@ spec:
         - name: AUTO_RELOAD
           value: 30
 EOF
-```
-
-## Build
-The following commands can be used to build and package the source code:
-
-Current operating system:
-```
-go build .
-```
-
-**Linux** operating system:
-```
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o webapp
-```
-
-**macOS** operating system:
-```
-CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o webapp
-```
-
-Docker:
-```
-docker buildx build --platform=linux/amd64 -t cloudacademydevops/webappecho:v4 .
 ```

@@ -63,10 +63,18 @@ setInterval(function(){
 </html>
 `
 
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
 func main() {
-	hostport := os.Getenv("HOSTPORT")
-	message := os.Getenv("MESSAGE")
-	bgcolor := os.Getenv("BACKGROUND_COLOR")
+	hostport := getEnv("HOSTPORT", "0.0.0.0:8080")
+	message := getEnv("MESSAGE", "follow the white rabbit...")
+	bgcolor := getEnv("BACKGROUND_COLOR", "yellow")
+
 	pagereloadtime := 0
 
 	if os.Getenv("AUTO_RELOAD") != "" {
@@ -86,5 +94,10 @@ func main() {
 	})
 
 	fmt.Println("web server launched successfully...")
+	fmt.Println(hostport)
+	fmt.Println(message)
+	fmt.Println(bgcolor)
+	fmt.Println(pagereloadtime)
+
 	http.ListenAndServe(hostport, nil)
 }
