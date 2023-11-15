@@ -8,7 +8,7 @@ A simple web based application that prints a message on a coloured background, b
 To start the web application, configure the following optional environment variables:
  - `HOSTPORT=0.0.0.0:8080`
  - `MESSAGE="CloudAcademy ❤ DevOps"`
- - `BACKGROUND_COLOR=yello`
+ - `BACKGROUND_COLOR=yellow`
  - `AUTO_RELOAD=30`
 
 ## Build
